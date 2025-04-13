@@ -1,0 +1,11 @@
+[project]
+name = "vector-db"
+version = "0.1.0"
+description = "Learning implementation of vector database"
+requires-python = ">=3.9"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.5",
+]
