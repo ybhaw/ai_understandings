@@ -33,3 +33,25 @@ def test_Should_give_correct_results_When_more_elements_are_present():
         sut.insert(float(i))
     results = sut.search(5.0, 5)
     assert results == [5.0, 6.0, 4.0, 7.0, 3.0]
+
+
+def test_Should_support_adding_negative_infinity():
+    sut = SkipList1D()
+    sut.insert(float("-inf"))
+    results = sut.search(float("-inf"), 10)
+    assert results == [float("-inf")]
+
+
+def test_Should_support_adding_positive_infinity():
+    sut = SkipList1D()
+    sut.insert(float("inf"))
+    results = sut.search(float("inf"), 10)
+    assert results == [float("inf")]
+
+
+def test_Should_return_n_items_When_all_items_are_same():
+    sut = SkipList1D()
+    for _ in range(10):
+        sut.insert(1.0)
+    results = sut.search(1.0, 5)
+    assert results == [1.0, 1.0, 1.0, 1.0, 1.0]

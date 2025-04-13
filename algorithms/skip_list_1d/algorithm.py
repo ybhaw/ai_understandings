@@ -23,7 +23,10 @@ class LinkedListNode:
         self.backward: list[LinkedListNode] = []
 
     def __repr__(self):
-        return f"Node({self.value})"
+        return f"Node({str(self.id)[:5]}: {self.value})"
+
+    def __str__(self):
+        return f"Node({str(self.id)[:5]}: {self.value})"
 
 
 class SkipList1D:
@@ -79,7 +82,10 @@ class SkipList1D:
 
         top_level = self.max_level - 1
         for i in range(top_level, -1, -1):
-            while current_head.forward[i] and current_head.forward[i].value < value:
+            while current_head.forward[i] and current_head.forward[i].value <= value:
+                # Handling edge case where item was +inf
+                if current_head.forward[i] == self._tail:
+                    break
                 current_head = current_head.forward[i]
             head_levels.append(current_head)
 
@@ -110,6 +116,9 @@ class SkipList1D:
         # Find current or left closest current_head
         for i in range(current_level, -1, -1):
             while current_head.forward[i] and current_head.forward[i].value <= value:
+                # Handling edge case where item was +inf
+                if current_head.forward[i] == self._tail:
+                    break
                 current_head = current_head.forward[i]
 
         left_node = current_head
@@ -137,21 +146,19 @@ class SkipList1D:
             n -= 1
 
         # If right_node is None, we need to keep adding left_node
-        while n > 0 and left_node and left_node != self._head:
+        while n > 0 and right_node is None and left_node != self._head:
             neighbours.append(left_node)
             left_node = left_node.backward[0]
             n -= 1
 
         # If left_node is None, we need to keep adding right_node
-        while n > 0 and right_node and right_node != self._tail:
+        while n > 0 and left_node is None and right_node != self._tail:
             neighbours.append(right_node)
             right_node = right_node.forward[0]
             n -= 1
 
         # Remove head and tail if they are present
-        neighbours = [
-            node for node in neighbours if node not in (self._head, self._tail)
-        ]
+        neighbours = [node for node in neighbours]
 
         # Returns in closest to farthest order
         return [n.value for n in neighbours]
