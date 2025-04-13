@@ -1,4 +1,12 @@
 """
+My understanding of NSW:
+- NSW is a graph-based algorithm for approximate nearest neighbor search.
+- It uses a greedy search strategy to find the nearest neighbors of a given query point
+- The algorithm starts with a random node and iteratively explores its neighbors to find the closest one.
+- The search continues until a stopping criterion is met
+    - such as reaching a certain number of neighbors
+    - a maximum distance.
+
 Got the idea from:
 https://www.analyticsvidhya.com/blog/2023/10/introduction-to-hnsw-hierarchical-navigable-small-world/
 """
