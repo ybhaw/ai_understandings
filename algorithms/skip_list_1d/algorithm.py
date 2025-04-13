@@ -108,7 +108,7 @@ class SkipList1D:
 
         self._total_nodes += 1
 
-    def search(self, value: float, n: int) -> List[float]:
+    def search(self, value: float, k: int) -> List[float]:
         current_head = self._head
 
         current_level = self.max_level - 1
@@ -129,8 +129,8 @@ class SkipList1D:
             right_node = None
 
         neighbours = []
-        n = max(0, n)
-        while n > 0 and left_node and right_node:
+        k = max(0, k)
+        while k > 0 and left_node and right_node:
             left_distance = value - left_node.value
             right_distance = right_node.value - value
             if left_distance < right_distance:
@@ -143,19 +143,19 @@ class SkipList1D:
                 left_node = None
             if right_node == self._tail:
                 right_node = None
-            n -= 1
+            k -= 1
 
         # If right_node is None, we need to keep adding left_node
-        while n > 0 and right_node is None and left_node != self._head:
+        while k > 0 and right_node is None and left_node != self._head:
             neighbours.append(left_node)
             left_node = left_node.backward[0]
-            n -= 1
+            k -= 1
 
         # If left_node is None, we need to keep adding right_node
-        while n > 0 and left_node is None and right_node != self._tail:
+        while k > 0 and left_node is None and right_node != self._tail:
             neighbours.append(right_node)
             right_node = right_node.forward[0]
-            n -= 1
+            k -= 1
 
         # Remove head and tail if they are present
         neighbours = [node for node in neighbours]

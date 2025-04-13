@@ -1,3 +1,10 @@
+import json
+import os
+import random
+import time
+
+import pytest
+
 from algorithms.skip_list_1d.algorithm import SkipList1D
 
 
@@ -55,3 +62,41 @@ def test_Should_return_n_items_When_all_items_are_same():
         sut.insert(1.0)
     results = sut.search(1.0, 5)
     assert results == [1.0, 1.0, 1.0, 1.0, 1.0]
+
+
+# TODO: move this to a visualization module instead.
+@pytest.mark.skipif(
+    condition=os.environ.get("RUN_VISUALIZATION_TESTS") != "true",
+    reason="Visualization tests are skipped unless RUN_VISUALIZATION_TESTS is set to true",
+)
+def test_Should_have_log_n_average_time_complexity():
+    """This only creates the data for visualization"""
+    max_elements = 10_000
+    iteration_count = 100
+    times = []
+    for _ in range(iteration_count):
+        sut = SkipList1D()
+        start_time = time.time()
+        insert_count = random.randint(1, max_elements)
+        for _ in range(insert_count):
+            sut.insert(random.random())
+        end_time = time.time()
+        insert_time = end_time - start_time
+        search_results = []
+        for __ in range(iteration_count):
+            start_time = time.time()
+            n = random.random()
+            k = random.randint(1, insert_count)
+            sut.search(n, k)
+            end_time = time.time()
+            search_time = end_time - start_time
+            search_results.append({"time": search_time, "n": n, "k": k})
+        times.append(
+            {
+                "insert_time": insert_time,
+                "search_time": search_results,
+                "n": insert_count,
+            }
+        )
+    with open("skip_list_1d_times.json", "w") as f:
+        json.dump(times, f)
